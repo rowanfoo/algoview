@@ -1,0 +1,130 @@
+<html lang = "en">
+<head>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+
+    <link rel = "stylesheet" href = "https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel = "stylesheet" href = "https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" >
+
+
+
+    <script language = "javascript">
+
+        var module = angular.module('firstApplication', ['ngMaterial']);
+
+        module.config(function($mdIconProvider) {
+            $mdIconProvider
+                .defaultFontSet('FontAwesome')
+                .fontSet('fa', 'FontAwesome');
+        });
+
+        module.controller('sideNavController', ['$scope','$location', function($scope,$location) {
+            console.log('HERE IN CONTROLLER');
+            $scope.fruitNames = ['Apple', 'Banana', 'Orange'];
+            $scope.alert = function (arg) {
+                console.log('I AM CLICK ');
+                alert(arg);
+                $location.path('/student');
+            }
+            $scope.adds = function (chip) {
+                console.log('adds ' + chip);
+                return chip + 's';
+            };
+
+            $scope.querySearch = function (filterString) {
+                console.log('super heroes');
+                console.log('super heroes '  + filterString);
+                var superheroes = [
+                    {id: 1, name: "Iron Man", category: "Marvel"},
+                    {id: 2, name: "Mowgli", category: "Disney"},
+                    {id: 3, name: "Spiderman", category: "Marvel"},
+                    {id: 4, name: "Superman", category: "DCComics"}];
+
+
+                if (filterString) {
+                    return superheroes.filter(function (item) {
+                        return item.name.toLowerCase().indexOf(filterString.toLowerCase()) >= 0;
+                    });
+                }
+                else {
+                    return superheroes;
+                };
+            };
+
+            $scope.secondaryButtonClickHandler = function () {
+                alert ('button click')
+
+            }
+
+
+
+
+
+
+        }]);
+
+
+
+
+
+
+
+    </script>
+
+
+
+</head>
+<body ng-app="firstApplication" style="background-color: none" layout="row" ng-controller="sideNavController">
+
+
+<div layout="column" layout-fill>
+
+
+ <div layout-padding>
+     <md-toolbar layout="row" layout-align="start center">Course Library</md-toolbar>
+ </div>
+
+    <md-content flex layout-padding>
+
+
+        <md-list>
+            <md-list-item class="md-2-line"  ng-click="null">
+                <md-icon md-font-icon="fa fa-bolt"  class="md-avatar-icon"></md-icon>
+
+                <div class="md-list-item-text" layout="column" >
+                    <strong>ROWAN FOO </strong>
+                    <div>SUPERMAN</div>
+                    <md-button class="md-secondary" ng-click="secondaryButtonClickHandler()"> Actions </md-button>
+                </div>
+                <md-button class="md-secondary" ng-click="secondaryButtonClickHandler()"> Actions </md-button>
+            </md-list-item>
+
+            <md-list-item class="md-2-line"  ng-click="null">
+
+                <md-icon md-font-icon="fa fa-plane"></md-icon>
+                <div class="md-list-item-text" layout="column" >
+                    <strong>Queenie</strong>
+                    <div>SUPER-WOMAN</div>
+                    <md-checkbox ng-model="message.selected"></md-checkbox>
+                </div>
+            </md-list-item>
+
+
+        </md-list>
+
+
+
+    </md-content>
+
+</div>
+
+</body>
+</html>

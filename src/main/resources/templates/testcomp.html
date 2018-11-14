@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+    <link data-require="bootstrap-css@*" data-semver="3.2.0" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <!--    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular.min.js"></script>
+
+    <script type="text/javascript">
+        var module = angular.module('phonecatApp', []);
+
+
+
+        module.controller('MainCtrl', ['$scope', function($scope){
+            $scope.data = {};
+            $scope.name='ROWAN';
+            this.name='ROWANs';
+
+            $scope.myclick = function(){
+                console.log('BUTTON PRESS');
+                $scope.name='ROWAN CAN YOU  INIT';
+            };
+
+            this.hero = {
+                name: 'Spawn'
+            };
+            console.log('HERE IN CONTROLLER');
+            this.$onInit=function(){
+                $scope.name='ROWAN i INIT';
+
+
+
+            };
+
+
+
+        }]);
+
+    </script>
+    <script src="my-component.js"></script>
+</head>
+<body ng-app="phonecatApp"  ng-controller="MainCtrl  as ctrl">
+  <h1> hellow </h1>
+  <h2> {{name}}</h2>
+  <h2> {{input1}}</h2>
+  <input ng-model="input1">
+  <button ng-click="myclick()">buy one</button>
+
+  <!--<phone-list></phone-list>-->
+  <rowan-it name="name" input="input1" ></rowan-it>
+  <!- <rowan-it name="ROWANS"></rowan-it>-->
+  </body>
+
+  </html>

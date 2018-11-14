@@ -1,0 +1,99 @@
+<html lang = "en">
+<head>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+
+    <link rel = "stylesheet" href = "https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+
+    <link rel = "stylesheet" href = "https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-route.js"></script>
+    <script language = "javascript">
+
+        var module = angular.module('firstApplication', ['ngMaterial','ngRoute']);
+        module.config(function ($routeProvider) {
+
+            $routeProvider.when('/student', {
+                templateUrl: '/angular/templates/test/routeB.html'
+
+            });
+
+        });
+
+        module.controller('sideNavController', ['$scope','$location', function($scope,$location){
+            console.log('HERE IN CONTROLLER');
+            $scope.alert = function(arg) {
+                console.log('I AM CLICK ');
+                alert(arg);
+                $location.path('/student');
+            }
+        }]);
+    </script>
+
+
+
+</head>
+<body ng-app="firstApplication" style="background-color: none" layout="row" ng-controller="sideNavController">
+
+<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-componentid="left" md-is-locked-open="$mdMedia('gt-md')">
+    <md-toolbar layout="row" layout-align="left">
+        <div>Welcome User!</div>
+        <div>login </div>
+        <div>logout </div>
+    </md-toolbar>
+
+
+
+
+
+    <md-list>
+        <md-subheader class="md-no-sticky">My Features</md-subheader>
+        <md-list-item class="secondary-button-padding" ng-click="alert('clicked')"> <p>  Courses</p> </md-list-item>
+
+        <md-list-item class="secondary-button-padding" ng-click=""> <p> <a href="/angular/templates/test/side.html#/student/">Contacts</a> </p> </md-list-item>
+        <md-list-item class="secondary-button-padding" ng-click="" md-ink-ripple="#FF0400"> <p>Calender</p>
+        </md-list-item>
+        <md-divider></md-divider>
+    </md-list>
+</md-sidenav>
+
+
+
+
+<div layout="column" layout-fill>
+ <div layout-padding>
+     <md-toolbar layout="row" layout-align="start center">Course Library</md-toolbar> </div>
+
+    <md-content flex layout-padding>
+        <p>
+            <div ng-view>
+            </div>
+        <div layout="row" style="background-color:teal;" layout-padding layout-wrap>
+
+            <md-card>
+                <md-card-title>
+                <md-card-title-text>
+                  <span class="md-headline">Card with image</span>
+                  <span class="md-subhead">Large</span>
+                </md-card-title-text>
+                 <md-card-title-media>
+                     <div class="md-media-lg card-media"></div>
+                 </md-card-title-media>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button>Action 1</md-button>
+                    <md-button>Action 2</md-button>
+                </md-card-actions>
+            </md-card>
+
+
+        </div>
+
+
+
+    </md-content> </div>
+
+</body>
+</html>

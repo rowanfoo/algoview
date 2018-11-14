@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+    <link data-require="bootstrap-css@*" data-semver="3.2.0" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <!--    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular.min.js"></script>
+
+    <script type="text/javascript">
+        var module = angular.module('phonecatApp', []);
+
+        module.controller('MainCtrl', ['$scope', function($scope){
+            console.log('HERE IN CONTROLLER');
+            $scope.count=0;
+            $scope.callback = function(amount){
+                $scope.count += amount;
+            }
+        }]);
+
+    </script>
+    <script src="testbindcomp.js"></script>
+</head>
+
+<body ng-app="phonecatApp"  ng-controller="MainCtrl  as ctrl">
+    <H3>Outer value: {{count}}</H3>
+
+  <rowan-it  meth="callback" ></rowan-it>
+
+  </body>
+
+  </html>

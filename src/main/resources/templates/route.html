@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link data-require="bootstrap-css@*" data-semver="3.2.0" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-route.js"></script>
+
+
+
+
+</head>
+
+
+<body ng-app="app" >
+<h1>Angular Routing Demo</h1>
+
+<div ng-view>
+
+
+    <script>
+        var app = angular.module('app', ['ngRoute']);
+
+        app.config(function ($routeProvider) {
+
+            $routeProvider.when('/', {
+                templateUrl: '/angular/templates/routeA.html',
+                controller: 'loginController'
+            }).when('/student/:username', {
+                templateUrl: '/routeB.html',
+                controller: 'studentController'
+            });
+
+
+
+
+
+
+
+            });
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
