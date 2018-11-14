@@ -1,0 +1,243 @@
+
+
+
+<html>
+
+
+
+    <head>
+
+
+
+        <script src = "/algoview/js/angular.min.js"></script>
+        <script src = "/algoview/js/angular-animate.min.js"></script>
+        <script src = "/algoview/js/angular-aria.min.js"></script>
+        <script src = "/algoview/js/angular-messages.min.js"></script>
+        <script src = "/algoview/js/angular-material.min.js"></script>
+        <script src = "/algoview/js/angular-route.js"></script>
+        <script src="/algoview/js/highstock.js"></script>
+
+        <!--<script src="https://code.highcharts.com/stock/highstock.js"></script>-->
+
+        <script src="/algoview/js/exporting.js"></script>
+        <script src="/algoview/js/jquery.min.js"></script>
+        <script src="/algoview/js/ema.js"></script>
+        <script src="/algoview/js/rsi.js"></script>
+        <script src="/algoview/js/indicators.js"></script>
+
+
+
+
+           <script src = "/algoview/workjs/mychart.js"></script>
+
+        <link rel = "stylesheet" href = "/algoview/css/angular-material.min.css">
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel = "stylesheet" href = "https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" >
+
+
+
+        <script type="text/javascript">
+
+            var module = angular.module('firstApplication', ['ngMaterial','ngRoute']);
+
+            module.controller('sideNavController', ['$scope','$http','$interval','getData', function($scope,$http, $interval,getData){
+                console.log('HERE IN CONTROLLER');
+                $scope.code ='';
+                $scope.stopinterval=function(){
+                    console.log('----------cLOSE ================== '  );
+                    $interval.cancel($scope.promise);
+                };
+
+                $scope.meth =function (url) {
+
+                    var mycodes = $http.get( url).then(function (data) {
+                        $scope.codes = [];
+                        for (i in data.data) {
+
+
+                            $scope.codes.push(data.data[i].code);
+
+
+
+
+                        }
+                        // for (i in   $scope.codes) {
+                        //     console.log('----------CODES================== '  + $scope.codes[i]);
+                        // }
+                        //
+
+                    });
+
+
+                    mycodes.then(function(){
+
+
+                        $scope.code = $scope.codes[counter++];
+                        for (i in   $scope.codes) {
+                            console.log('----------CODES================== '  + $scope.codes[i]);
+                            ////
+                        }
+
+
+                        chartfunc($http , $scope.code);
+
+                        $scope.promise = $interval(dochartfunc, 5000);
+
+                    });
+
+                    var counter=0;
+                    function  dochartfunc() {
+
+                        if (counter > $scope.codes.length) {
+                            console.log('----------END INTERVAL ================== ');
+
+                            $scope.stopinterval();
+                        }else{
+                            $scope.code = $scope.codes[counter++];
+                            chartfunc($http , $scope.code);
+
+                        }
+
+
+                    }
+
+
+
+                    $scope.downfour =function () {
+                        $scope.stopinterval();
+
+
+
+
+                    }
+                 //   console.log( JSON.stringify( $scope.codes, null, "    ") );
+
+
+
+
+                    // // var date = new Date();
+                    // // var year =date.getFullYear()-1;
+                    // // var mm = (date.getMonth()+1).toString();
+                    // // var dd  = date.getDate().toString();
+                    // //
+                    // //
+                    // // var myurl =   "http://localhost:8070/data?code=bhp.ax&date="+year+"-"+ (mm[1]?mm:"0"+mm[0])+"-"+ (dd[1]?dd:"0"+dd[0]);
+                    // //
+                    // // console.log('------------myurl------------ ' + myurl);
+                    // //
+                    // // $http.get(myurl).then(function (data) {
+                    // //     //    console.log( JSON.stringify( data, null, "    ") );
+                    // //
+                    // //     $scope.seriesOptions = [];
+                    // //     for (i in data.data) {
+                    // //
+                    // //
+                    // //         $scope.seriesOptions.push([
+                    // //             new Date(data.data[i].date).getTime(), // the date
+                    // //             data.data[i].open_price , // open
+                    // //             data.data[i].day_high_price, // high
+                    // //             data.data[i].day_low_price, // low
+                    // //             data.data[i].last_price // close
+                    // //         ]);
+                    // //
+                    // //
+                    // //
+                    // //     }
+                    // //     console.log('------------DONE------------ ' );
+                    // //     createChart('container1', $scope.seriesOptions) ;
+                    // //     chart.series.forEach(function(ser) {
+                    // //         ser.update({
+                    // //             dataGrouping: {
+                    // //                 units: [ ['day', [1]] ],
+                    // //                 groupPixelWidth: 10
+                    // //             }
+                    // //         }, false);
+                    // //     });
+                    // //     chart.redraw();
+                    //
+                    // });
+
+
+
+
+
+
+                }//eof
+
+
+
+
+
+
+
+
+
+
+            }]);
+        </script>
+        <script src="/algoview/service/submitservice.js"></script>
+
+    </head>
+    <body ng-app="firstApplication" style="background-color: none" layout="row" ng-controller="sideNavController">
+    <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-componentid="left" md-is-locked-open="$mdMedia('gt-md')" flex="10">
+        <md-toolbar layout="row" layout-align="left">
+            <div>Welcome Rowan!</div>
+        </md-toolbar>
+
+
+
+
+
+        <md-list>
+            <md-subheader class="md-no-sticky">My Features</md-subheader>
+            <md-list-item class="secondary-button-padding" ng-click="alert('clicked')"> <p>  All Stock </p> </md-list-item>
+
+            <md-list-item class="secondary-button-padding" ng-click=""> <p> <a href="/angular/templates/test/side.html#/student/">Daily </a> </p> </md-list-item>
+            <md-list-item class="secondary-button-padding" ng-click="meth('http://localhost:8050/fallfour')" md-ink-ripple="#FF0400"> <p>Down 4%</p> </md-list-item>
+            <md-list-item class="secondary-button-padding" ng-click="meth('http://localhost:8070/stock/wishlist')" md-ink-ripple="#FF0400"> <p>wishlist</p> </md-list-item>
+
+
+
+            <md-divider></md-divider>
+            <md-list-item class="secondary-button-padding" ng-click="" md-ink-ripple="#FF0400"> <p><md-button class="md-raised" ng-click="stopinterval()">pause</md-button></p> </md-list-item>
+            <md-list-item class="secondary-button-padding" ng-click="" md-ink-ripple="#FF0400"> <p><md-button class="md-raised" ng-click="stopinterval()">start </md-button></p> </md-list-item>
+
+
+
+
+        </md-list>
+    </md-sidenav>
+
+
+<strong>{{code}}</strong>
+
+<div class="container">
+
+    <div class="row">
+
+            <div class="col-md-12" >
+                <div id='container1'></div>
+            </div>
+        <div class="col-md-12" >
+            <div id='container2'></div>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+
+</body>
+</html>
+
+
