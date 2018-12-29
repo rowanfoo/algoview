@@ -15,7 +15,18 @@
         <script src = "/algoview/js/angular-messages.min.js"></script>
         <script src = "/algoview/js/angular-material.min.js"></script>
         <script src = "/algoview/js/angular-route.js"></script>
+
+
+
+
+
         <script src="/algoview/js/highstock.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
+
+
+
+
 
         <!--<script src="https://code.highcharts.com/stock/highstock.js"></script>-->
 
@@ -25,8 +36,7 @@
         <script src="/algoview/js/rsi.js"></script>
         <script src="/algoview/js/indicators.js"></script>
 
-
-
+        <script src="/algoview/templates/config.js"></script>
 
            <script src = "/algoview/workjs/mychart.js"></script>
 
@@ -47,9 +57,37 @@
 
             var module = angular.module('firstApplication', ['ngMaterial','ngRoute']);
 
-            module.controller('sideNavController', ['$scope','$http','$interval','getData', function($scope,$http, $interval,getData){
+            module.config(function($mdDateLocaleProvider) {
+                $mdDateLocaleProvider.formatDate = function(date) {
+                    return moment(date).format('YYYY/MM/DD');
+                };
+
+            });
+
+
+            module.controller('sideNavController', ['$rootScope','$scope','$http','$interval','getData', function($rootScope,$scope,$http, $interval,getData){
                 console.log('HERE IN CONTROLLER');
                 $scope.code ='';
+                var counter=0;
+                $scope.notes= [];
+                $scope.mydate = {date:new Date()};
+                setconfig($rootScope);
+                //
+                // $scope.selecteddate=function(){
+                // //    var endto= $scope.mydate;
+                //     var endto = moment($scope.mydate.date).format('YYYY-MM-DD');
+                //
+                //     console.log('----------- i set date----'+endto);
+                // }
+                $scope.getformatdate =function () {
+                    console.log('----------getformatdate NOTES================== '  );
+                    return  moment($scope.mydate.date).format('YYYY-MM-DD');
+
+
+                };
+
+
+
                 $scope.stopinterval=function(){
                     console.log('----------cLOSE ================== '  );
                     $interval.cancel($scope.promise);
@@ -57,6 +95,9 @@
 
                 $scope.meth =function (url) {
 
+                    var dateselect = moment($scope.mydate.date).format('YYYY-MM-DD');
+                    url = url +"?date="+dateselect;
+                    console.log('----------DATES================== '  + url);
                     var mycodes = $http.get( url).then(function (data) {
                         $scope.codes = [];
                         for (i in data.data) {
@@ -80,19 +121,19 @@
 
 
                         $scope.code = $scope.codes[counter++];
-                        for (i in   $scope.codes) {
-                            console.log('----------CODES================== '  + $scope.codes[i]);
-                            ////
-                        }
+                        // for (i in   $scope.codes) {
+                        //     console.log('----------CODES================== '  + $scope.codes[i]);
+                        //     ////
+                        // }
 
-
-                        chartfunc($http , $scope.code);
+                        console.log('----------XXXXXXX================== '   );
+                        chartfunc($http ,$rootScope, $scope.code);
 
                         $scope.promise = $interval(dochartfunc, 5000);
 
                     });
 
-                    var counter=0;
+
                     function  dochartfunc() {
 
                         if (counter > $scope.codes.length) {
@@ -101,7 +142,39 @@
                             $scope.stopinterval();
                         }else{
                             $scope.code = $scope.codes[counter++];
-                            chartfunc($http , $scope.code);
+                            console.log('----------GOING TO CHART================== ');
+                            $scope.notes= [];
+
+                            $http.get( 'http://localhost:8050/codetech?code='+$scope.code).then(function (data) {
+
+                                for (i in data.data) {
+                                    $scope.notes.push(data.data[i]);
+                                     console.log('----------NOTES================== '  + $scope.notes[i]);
+                                }
+                                console.log('----------SCOPE NOTES= LENGTH================= '  + $scope.notes.length );
+                                for (i in  $scope.notes) {
+                                    console.log('----------SCOPE NOTES================== '  + $scope.notes[i]);
+                                }
+
+
+                            });
+
+
+
+
+
+
+
+
+
+
+
+
+                            chartfunc($http ,$rootScope, $scope.code);
+
+
+
+
 
                         }
 
@@ -110,13 +183,17 @@
 
 
 
-                    $scope.downfour =function () {
-                        $scope.stopinterval();
 
 
+                    $scope.startinterval =function () {
+
+                        $scope.promise = $interval(dochartfunc, 5000);
 
 
                     }
+
+
+
                  //   console.log( JSON.stringify( $scope.codes, null, "    ") );
 
 
@@ -199,15 +276,45 @@
             <md-subheader class="md-no-sticky">My Features</md-subheader>
             <md-list-item class="secondary-button-padding" ng-click="alert('clicked')"> <p>  All Stock </p> </md-list-item>
 
-            <md-list-item class="secondary-button-padding" ng-click=""> <p> <a href="/angular/templates/test/side.html#/student/">Daily </a> </p> </md-list-item>
-            <md-list-item class="secondary-button-padding" ng-click="meth('http://localhost:8050/fallfour')" md-ink-ripple="#FF0400"> <p>Down 4%</p> </md-list-item>
-            <md-list-item class="secondary-button-padding" ng-click="meth('http://localhost:8070/stock/wishlist')" md-ink-ripple="#FF0400"> <p>wishlist</p> </md-list-item>
+            <md-list-item class="secondary-button-padding" ng-click="meth(config.downfour)" md-ink-ripple="#FF0400"> <p>Down </p> </md-list-item>
+            <md-list-item class="secondary-button-padding" ng-click="meth(config.rsi)" md-ink-ripple="#FF0400"> <p>rsi</p> </md-list-item>
+            <md-list-item class="secondary-button-padding" ng-click="meth(config.vol)" md-ink-ripple="#FF0400"> <p>vol </p> </md-list-item>
+            <md-list-item class="secondary-button-padding" ng-click="meth(config.conseqfall)" md-ink-ripple="#FF0400"> <p>conseqfall </p> </md-list-item>
+            <md-list-item class="secondary-button-padding" ng-click="meth(config.largefall)" md-ink-ripple="#FF0400"> <p>largefall </p> </md-list-item>
+            <md-list-item class="secondary-button-padding" ng-click="meth(config.reversal)" md-ink-ripple="#FF0400"> <p>reversal </p> </md-list-item>
+
+
+
+
+            <!--<md-list-item class="secondary-button-padding" ng-click="meth('http://localhost:8070/stock/wishlist')" md-ink-ripple="#FF0400"> <p>wishlist</p> </md-list-item>-->
+
+            <md-list-item class="secondary-button-padding" ng-click="meth(config.wishlist)" md-ink-ripple="#FF0400"> <p>wishlist</p> </md-list-item>
+            <md-divider></md-divider>
+            <md-menu>
+                <!-- Trigger for menu -->
+                <md-button ng-click="$mdOpenMenu()"> Admin </md-button>
+                <!-- Individual menu options and buttons-->
+
+                <md-menu-content>
+                    <md-menu-item>
+                        <md-content>
+                        <md-datepicker md-placeholder="Select a date" ng-model="mydate.date"  ></md-datepicker>
+                        </md-content>
+                    </md-menu-item>
+
+                    <md-menu-item>
+                        <md-button ng-click="editnews()"> edit </md-button>
+                    </md-menu-item>
+
+                </md-menu-content>
+            </md-menu>
+
 
 
 
             <md-divider></md-divider>
             <md-list-item class="secondary-button-padding" ng-click="" md-ink-ripple="#FF0400"> <p><md-button class="md-raised" ng-click="stopinterval()">pause</md-button></p> </md-list-item>
-            <md-list-item class="secondary-button-padding" ng-click="" md-ink-ripple="#FF0400"> <p><md-button class="md-raised" ng-click="stopinterval()">start </md-button></p> </md-list-item>
+            <md-list-item class="secondary-button-padding" ng-click="" md-ink-ripple="#FF0400"> <p><md-button class="md-raised" ng-click="startinterval()">start </md-button></p> </md-list-item>
 
 
 
@@ -216,22 +323,16 @@
     </md-sidenav>
 
 
-<strong>{{code}}</strong>
-
-<div class="container">
-
+    <strong>{{code}}</strong>
+    <font size="0.5" color="blue">{{getformatdate()}}</font>
+    <div class="container">
     <div class="row">
-
-            <div class="col-md-12" >
-                <div id='container1'></div>
-            </div>
         <div class="col-md-12" >
-            <div id='container2'></div>
+            <div id='container1'></div>
         </div>
 
-
     </div>
-
+    <md-chips ng-model = "notes"   placeholder="please enter fruit names " > </md-chips>
 </div>
 
 
